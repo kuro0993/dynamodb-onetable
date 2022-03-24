@@ -33,10 +33,13 @@ test('Create', async() => {
         name: 'Peter Smith',
         status: 'active',
         email: 'peter@example.com',
+        // remarks: '',
         address: '444 Cherry Tree Lane',
         city: 'Paris',
-        zip: '1234567'
+        zip: '1234567',
+        // roomNumber: '100'
     })
+    console.log(user);
     expect(user).toMatchObject({
         name: 'Peter Smith',
         status: 'active',

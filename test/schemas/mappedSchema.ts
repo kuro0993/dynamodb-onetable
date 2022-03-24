@@ -26,11 +26,13 @@ export default {
             name:        { type: String, map: 'nm' },
             email:       { type: String, map: 'em' },
             status:      { type: String, map: 'st' },
+            remarks:         { type: String, map: 'rs' },
 
             //  Properties packed into the "data" attribute projected to the gs1 secondary index
             address:     { type: String, map: 'data.address' },
             city:        { type: String, map: 'data.city' },
             zip:         { type: String, map: 'data.zip' },
+            roomNumber:         { type: String, map: 'data.roomNumber' },
 
             //  Find by type or email
             gs1pk:     { type: String, value: 'ty#us', map: 'pk1' },

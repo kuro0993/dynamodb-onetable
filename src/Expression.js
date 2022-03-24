@@ -104,9 +104,11 @@ export class Expression {
         */
         if (this.mapped) {
             for (let [att, props] of Object.entries(this.mapped)) {
-                if (Object.keys(props).length != this.model.mappings[att].length) {
+              for(let prop of this.model.mappingsRequired[att]){
+                if (!Object.keys(props).includes(prop)){
                     throw new OneTableArgError(`Missing properties for mapped data field "${att}" in model "${this.model.name}"`)
                 }
+              }
             }
             for (let [k,v] of Object.entries(this.mapped)) {
                 this.add({attribute: [k], name: k, filter: false}, v, properties)

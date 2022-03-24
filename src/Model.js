@@ -80,6 +80,7 @@ export class Model {
             field.attribute = [attributeName, optional-sub-propertiy]
         */
         this.mappings = {}
+        this.mappingsRequired = {}
 
         this.schema = table.schema
         this.indexes = this.schema.indexes
@@ -120,6 +121,7 @@ export class Model {
 
         //  Attributes that are mapped to a different attribute. Indexed by attribute name for this block.
         let mapTargets = {}
+        let mapTargetsRequired = {}
         let map = {}
 
         for (let [name, field] of Object.entries(schemaFields)) {
@@ -148,6 +150,7 @@ export class Model {
             if (to) {
                 let [att, sub] = to.split('.')
                 mapTargets[att] = mapTargets[att] || []
+                mapTargetsRequired[att] = mapTargetsRequired[att] || []
                 if (sub) {
                     if (map[name] && !Array.isArray(map[name])) {
                         throw new OneTableArgError(`Map already defined as literal for ${this.name}.${name}`)
@@ -157,12 +160,18 @@ export class Model {
                         throw new OneTableArgError(`Multiple attributes in ${this.pathname} mapped to the target ${to}`)
                     }
                     mapTargets[att].push(sub)
+                    if(field.required){
+                      mapTargetsRequired[att].push(sub)
+                    }
                 } else {
                     if (mapTargets[att].length > 1) {
                         throw new OneTableArgError(`Multiple attributes in ${this.name} mapped to the target ${to}`)
                     }
                     field.attribute = map[name] = [att]
                     mapTargets[att].push(true)
+                    if(field.required){
+                      mapTargetsRequired[att].push(true)
+                    }
                 }
             } else {
                 field.attribute = map[name] = [name]
@@ -216,6 +225,7 @@ export class Model {
             this.hasUniqueFields = true
         }
         this.mappings = mapTargets
+        this.mappingsRequired = mapTargetsRequired
 
         /*
             Order the fields so value templates can depend on each other safely
